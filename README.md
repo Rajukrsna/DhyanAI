@@ -18,13 +18,13 @@
 ---
 
 ## Inspiration
-HealthTrackPro was inspired by the need for a comprehensive yet user-friendly application that empowers individuals to track their habits, understand their nutrition and their goal of calorie intake per day, get health symptom analysis from AI, receive personalized health advice for the same. Our goal is to help users make informed choices about their health through data-driven insights and AI-powered suggestions.
+DhyanAI was inspired by the need for a combination of scientific and traditional application that empowers individuals to track their habits, understand their nutrition and their goal of calorie intake per day, get health symptom analysis from AI, receive Yoga recommendations , personalized health advice for the same. Our goal is to help users make informed choices about their health through data-driven insights and AI-powered suggestions.
 
 ---
 
 ## Project Objectives
 1. Develop a **holistic health and wellness application** focused on tracking user habits and analyzing nutrient intake.
-2. Integrate **AI-based recommendations** for nutrition, wellness practices and to cure health symptom
+2. Integrate **AI-based recommendations** for nutrition, wellness practices, yoga Recommendation and to cure health symptoms.
 
 ---
 
@@ -39,6 +39,7 @@ HealthTrackPro was inspired by the need for a comprehensive yet user-friendly ap
   - MongoDB (NoSQL) hosted on AWS for secure and scalable data storage.
 - **AI Model**: 
   - **Cohere AI model**: Used for health symptom analysis and personalized recommendations.
+  - **Stability Diffusion AI model**:Used for Generating the yoga pose the user desires.
   - **AWS Bedrock**: for accessing the foundation models that AWS offers.
 - **Lambda Functions**: 
   - AWS Lambda handles serverless execution of tasks like data processing and user request handling in the backend.
@@ -47,7 +48,7 @@ HealthTrackPro was inspired by the need for a comprehensive yet user-friendly ap
 - **Frontend Components**:
   - Register, Login, Habit Tracking, Nutritional Analysis, Health Issue/symptom Input, HealthAI chatbot.
 - **Backend Components**:
-  - User Authentication, Data Processing, API Integration, and Database Communication, report generation.
+  - User Authentication, Data Processing, API Integration, and Database Communication, Report generation, AI Image Generation.
 - **Data Storage**:
   - MongoDB database hosted on AWS for secure and efficient management of user health data.
 
@@ -60,21 +61,6 @@ HealthTrackPro was inspired by the need for a comprehensive yet user-friendly ap
   - Deployed on AWS to ensure scalability, reliability, and security of user data.
 
 ---
-
-## Technical Documentation
-
-### Explanation of Key Components and Modules
-- **User Authentication Module**: 
-  - Manages user sessions and access control.
-- **Habit Tracker Module**: 
-  - Allows users to record and visualize daily activities.
-- **Nutritional Analysis Module**: 
-  - Accepts user food inputs and provides nutrient breakdown.
-- **AI Recommendation Module**:
-  - Uses **Cohere AI** for health symptom analysis and personalized recommendations based on user data.
-  - **AWS Bedrock** enables advanced AI models for health trend analysis and predictions.
-
-
 ### Setup and Usage Instructions
 
 1. **Clone the Repository**
