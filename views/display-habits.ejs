@@ -1,17 +1,23 @@
-<div class="container mt-5 p-4 bg-light rounded shadow-sm">
-  <h2 class="text-center text-primary mb-4">Your Habits</h2>
+<div class="container mt-5 p-4 bg-light rounded shadow-lg habit-tracker">
+  <h2 class="text-center text-primary mb-4 animate__animated animate__fadeInDown">Your Habits</h2>
+
+  <div class="text-center my-4">
+    <h3 id="current-month" class="text-primary fw-bold"></h3>
+  </div>
+  
   <!-- Date Cards Section -->
-  <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+  <div class="d-flex flex-wrap justify-content-center gap-2 mb-4 animate__animated animate__fadeIn">
     <% for (let i = 1; i <= 31; i++) { %>
       <form action="/habits/date/<%= i %>" method="GET" class="d-inline">
-        <button type="submit" class="btn btn-outline-primary rounded-pill px-3 py-2 <%= selectedDate === i ? 'active' : '' %>">
+        <button type="submit" class="btn date-btn <%= selectedDate === i ? 'active' : '' %>">
           <%= i %>
         </button>
       </form>
     <% } %>
   </div>
-  <div class="table-responsive">
-    <table class="table table-hover table-bordered align-middle text-center">
+
+  <div class="table-responsive animate__animated animate__zoomIn">
+    <table class="table table-hover table-bordered align-middle text-center habit-table">
       <thead class="table-dark">
         <tr>
           <th>Habit Name</th>
@@ -23,7 +29,7 @@
       <tbody>
         <% habits.forEach(habit => { %>
           <tr>
-            <td class="fw-bold"><%= habit.habitName %></td>
+            <td class="fw-bold habit-name"><%= habit.habitName %></td>
             <td><%= habit.goal %> times/day</td>
             <td>
               <span class="badge <%= habit.completed ? 'bg-success' : 'bg-warning text-dark' %>">
@@ -34,11 +40,11 @@
               <div class="d-flex justify-content-center gap-2">
                 <% if (!habit.completed) { %>
                   <form action="/habits/complete/<%= habit._id %>" method="POST">
-                    <button type="submit" class="btn btn-sm btn-outline-success">Mark Complete</button>
+                    <button type="submit" class="btn btn-sm btn-outline-success btn-action animate__animated animate__pulse animate__infinite">Mark Complete</button>
                   </form>
                 <% } %>
                 <form action="/habits/delete/<%= habit._id %>" method="POST">
-                  <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                  <button type="submit" class="btn btn-sm btn-outline-danger btn-action">Delete</button>
                 </form>
               </div>
             </td>
@@ -49,11 +55,97 @@
   </div>
 
   <div class="text-end mt-3">
-    <a href="/habits/add" class="btn btn-lg btn-primary shadow-sm">
+    <a href="/habits/add" class="btn btn-lg btn-primary shadow-sm add-habit-btn animate__animated animate__bounceIn">
       <i class="bi bi-plus-circle"></i> Add New Habit
     </a>
   </div>
 </div>
 
-<!-- Add Bootstrap Icons (optional) -->
+<!-- Add Bootstrap Icons and Animate.css for animation effects -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+
+<style>
+  /* Container and Page Styling */
+  .habit-tracker {
+    background: linear-gradient(to right, #f0f9ff, #cbebff);
+    border-radius: 12px;
+    padding: 30px;
+  }
+
+  /* Title Styling */
+  .habit-tracker h2 {
+    color: #0d6efd;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* Date Button Styling */
+  .date-btn {
+    width: 45px;
+    height: 45px;
+    font-weight: bold;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+    color: #0d6efd;
+  }
+  .date-btn.active {
+    background-color: #0d6efd;
+    color: #fff;
+  }
+  .date-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+  }
+
+  /* Table Styling */
+  .habit-table {
+    background: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Habit Name Styling */
+  .habit-name {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+  }
+
+  /* Action Button Styling */
+  .btn-action {
+    transition: transform 0.2s ease;
+  }
+  .btn-action:hover {
+    transform: scale(1.1);
+  }
+
+  /* Add Habit Button */
+  .add-habit-btn {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+  .add-habit-btn:hover {
+    background-color: #0b5ed7;
+    color: #fff;
+  }
+
+  /* Badge Styling */
+  .badge {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  /* Hover Effect */
+  .habit-table tbody tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }
+</style>
+<script>
+  // Get the current month name
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"];
+  const currentDate = new Date();
+  const currentMonth = monthNames[currentDate.getMonth()];
+
+  // Display the month name in the header
+  document.getElementById("current-month").textContent = `${currentMonth}`;
+</script>

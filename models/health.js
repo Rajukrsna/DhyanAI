@@ -12,6 +12,7 @@ const healthSchema = new mongoose.Schema({
   },
   possibleCause: {
     type: String,
+    required: false,
      // Possible cause is required after analysis
   },
   createdAt: {

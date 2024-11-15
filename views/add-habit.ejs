@@ -1,14 +1,109 @@
+<div class="container mt-5 p-4 bg-light rounded shadow-sm">
+  <h2 class="text-center text-primary mb-4">🌱 Add a New Habit 🌱</h2>
 
-<h2>Add a New Habit</h2>
+  <form action="/habits/add" method="POST" class="habit-form p-4 rounded shadow-sm">
+    <!-- Habit Name Input -->
+    <div class="form-group mb-4">
+      <label for="habitName" class="form-label">Habit Name</label>
+      <input type="text" class="form-control" id="habitName" name="habitName" placeholder="e.g., Drink Water" required>
+      <small class="form-text text-muted">Give a meaningful name to track your progress.</small>
+    </div>
 
-<form action="/habits/add" method="POST">
-  <div class="form-group">
-    <label for="habitName">Habit Name</label>
-    <input type="text" class="form-control" id="habitName" name="habitName" placeholder="e.g., Drink Water" required>
-  </div>
-  <div class="form-group">
-    <label for="goal">Daily Goal (times per day)</label>
-    <input type="number" class="form-control" id="goal" name="goal" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Add Habit</button>
-</form>
+    <!-- Goal Input -->
+    <div class="form-group mb-4">
+      <label for="goal" class="form-label">Daily Goal</label>
+      <input type="number" class="form-control" id="goal" name="goal" min="1" required>
+      <small class="form-text text-muted">How many times a day do you want to achieve this habit?</small>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary btn-lg add-habit-button">➕ Add Habit</button>
+    </div>
+  </form>
+</div>
+
+<!-- CSS Styles -->
+<style>
+  /* Background and container styling */
+  body {
+    background: linear-gradient(135deg, #f0f7f7, #dff0ea);
+    font-family: Arial, sans-serif;
+  }
+
+  /* Form styling */
+  .habit-form {
+    background: white;
+    border-radius: 12px;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .habit-form:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Labels and input styling */
+  .form-label {
+    font-weight: bold;
+    color: #5a5a5a;
+    font-size: 1.1rem;
+  }
+
+  .form-control {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
+  }
+
+  /* Add Habit button styling */
+  .add-habit-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 32px;
+    font-size: 1.2rem;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .add-habit-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+
+  /* Animation for form elements */
+  .habit-form {
+    animation: fadeIn 1.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<!-- Additional JS for input field animations -->
+<script>
+  // Animate input fields on focus
+  document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('focus', () => {
+      input.style.boxShadow = '0 4px 10px rgba(0, 123, 255, 0.2)';
+    });
+    input.addEventListener('blur', () => {
+      input.style.boxShadow = '';
+    });
+  });
+</script>

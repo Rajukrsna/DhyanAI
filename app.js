@@ -56,7 +56,9 @@ const authRouter = require('./routes/auth');
 const sympRouter = require('./routes/symptom');
 const chatbotRoute = require('./routes/chatbot');  
 const generateRoute = require('./routes/generate');
+const recommendYoga = require('./routes/yogas');
 // Routes
+
 app.use('/auth', authRouter);
 app.use('/habits', habitRoutes);
 app.use('/nutrition', nutritionRoutes);
@@ -64,6 +66,7 @@ app.use('/symptom', sympRouter)
 app.use('/dashboard', dashboardRouter);
 app.use('/chatbot', chatbotRoute);  
 app.use('/generate', generateRoute);
+app.use('/yogas' , recommendYoga);
 
 // Home Route
 app.get('/', (req, res) => res.redirect('/auth/login'));

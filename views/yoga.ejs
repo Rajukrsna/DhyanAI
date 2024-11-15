@@ -1,0 +1,96 @@
+<div class="container mt-5 yoga-page">
+    <h1 class="text-center mb-5">Yoga Recommendations</h1>
+  
+    <!-- Problem Entry Form -->
+    <form id="problemForm" action="/yogas" method="POST" class="mb-4">
+      <div class="mb-4">
+        <label for="problemInput" class="form-label fs-5">Enter your health problem</label>
+        <input type="text" name="healthIssue" class="form-control fs-5 p-3" id="problemInput" placeholder="e.g., Knee pain, Back pain" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg w-100 py-3">Give Yoga Asanas</button>
+    </form>
+  
+    <!-- Yoga Recommendations -->
+    <% if (typeof botReply !== 'undefined' && botReply) { %>
+      <div id="yogaRecommendations" class="yoga-card mb-5">
+        <div class="card shadow-lg">
+          <div class="card-header bg-info text-white">
+            <h5 class="card-title">Yoga Recommendations for <%= healthIssue %></h5>
+          </div>
+          <div class="card-body">
+            <ul id="yogaList" class="list-group list-group-flush">
+              <li class="list-group-item fs-5"><%= botReply %></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  
+  <br>
+  <br>
+  <!-- Yoga Pose Search Form -->
+  <form id="poseSearchForm" action="/yogas/generateImg" method="GET" class="mb-4">
+    <div class="mb-4">
+      <label for="poseSearchInput" class="form-label fs-5">Search for a Yoga Pose</label>
+      <input type="text" name="poseName" class="form-control fs-5 p-3" id="poseSearchInput" placeholder="Enter yoga pose name" required>
+    </div>
+    <button type="submit" class="btn btn-secondary btn-lg w-100 py-3">Generate Image</button>
+  </form>
+
+  <!-- Pose Image -->
+  <% if (typeof imageUrl !== 'undefined' && imageUrl) { %>
+    <div id="poseImage" class="mb-3">
+      <h4 class="fs-4">Yoga Pose Image: <%= poseName %></h4>
+      <img id="poseImageDisplay" src="<%= imageUrl %>" class="yoga-pose-image img-fluid rounded" alt="Yoga Pose Image">
+    </div>
+  <% } %>
+
+</div>
+
+<!-- Custom Scoped CSS -->
+<style>
+  .yoga-page .yoga-card {
+    margin-top: 20px;
+  }
+
+  .yoga-page .yoga-pose-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+
+  .yoga-page .search-bar {
+    margin-top: 30px;
+  }
+
+  .container {
+    max-width: 800px;
+  }
+
+  .btn-lg {
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .card {
+    border-radius: 15px;
+  }
+
+  .card-header {
+    font-size: 1.25rem;
+  }
+
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .fs-5 {
+    font-size: 1.2rem;
+  }
+</style>
