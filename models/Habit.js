@@ -1,14 +1,31 @@
 const mongoose = require('mongoose');
 
-// Check if the model already exists in mongoose.models to avoid overwriting it
+
 const habitSchema = new mongoose.Schema({
-  habitName: String,
-  goal: Number,
-  completed: { type: Boolean, default: false },
-  date: { type: Date, default: Date.now }
+  userId: { type: String , ref: 'User', required: true },
+  habitName: {
+    type: String,
+    required: true
+  },
+  completedDates: {
+    type: [Date],  // Array to store dates when the habit was completed
+    default: []
+  },
+  notCompletedDates: {
+    type: [Date],  // Array to store dates when the habit was not completed
+    default: []
+  },
+  monthlyFollowed: {
+    type: Map,
+    of: Number,
+    default: {}
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-// Prevent overwriting the model if it's already defined
-const Habit =  mongoose.model('Habit', habitSchema);
+const Habit = mongoose.model('Habit', habitSchema);
 
 module.exports = Habit;

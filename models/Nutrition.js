@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 const nutritionSchema = new mongoose.Schema({
-  calories: Number,
-  protein: Number,
-  carbs: Number,
-  fats: Number,
+  
+   user: { type: String , ref: 'User', required: true },
+
   breakfast: {
     food: String,
     calories: Number,

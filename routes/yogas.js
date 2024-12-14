@@ -2,75 +2,127 @@ const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 const YogaRecommendation = require('../models/yoga');
+const Nutrition = require('../models/Nutrition');
+const authenticateToken = require('../middlewares/auth');
+const User= require('../models/User');
 require('dotenv').config();
+
 
 const LAMBDA_API_URL =process.env.URILAMA;
 const AntroURI = process.env.STURI;
-router.get('/yoga',(req,res)=>
-{
-    res.render('yoga');
+
+router.get('/', authenticateToken, async(req,res)=>
+{ 
+  //console.log(req.user.userId)
+   let nutritionEntry = await Nutrition.findOne({user:req.user.userId});
+const user= await User.findById(req.user.userId);
+  // //console.log(nutritionEntry)
+
+    res.render('yoga', { user ,nutritionData: nutritionEntry});
 
 })
 
-router.post('/', async (req, res) => {
-    const { healthIssue } = req.body;
-    let botReply = '';
-  
+// Endpoint for chatbot interactions using Meta-Llama-3.3-70B-Instruct
+router.post("/sanas", async (req, res) => {
+  try {
+//console.log(req.body);
+//console.log(req.headers);
+    const healthProblem = req.body.issue;  // Get the extracted content (ingredients, etc.)
     
-  
-    try {
-      //call the AI model for the response
-      const response = await axios.post(
-        LAMBDA_API_URL,
-        { prompt: `Give the yoga practices to cure ${healthIssue}` ,
-      
-         },
-          
-         // Send input as a JSON object
+//console.log(extractedIngredients);
+    // Create the prompt for recipe generation
+   const prompt = `You are an AI yoga guide. Given the following health problem, generate 3 suitable yogasanas. The output should be structured in the following JSON format:
+
+    {
+      "yogasanas": [
         {
-            headers: {
-                'Content-Type': 'text/plain', // Set Content-Type to application/json
-                'Accept': 'application/json'
-            }
+          "name": "{Yogasana Name}",
+          "benefits": [
+            "{Benefit 1}",
+            "{Benefit 2}",
+            "{Benefit 3}"
+          ],
+          "instructions": "{Step-by-step instructions to perform the yogasana}"
+        },
+        {
+          "name": "{Yogasana Name}",
+          "benefits": [
+            "{Benefit 1}",
+            "{Benefit 2}",
+            "{Benefit 3}"
+          ],
+          "instructions": "{Step-by-step instructions to perform the yogasana}"
+        },
+        {
+          "name": "{Yogasana Name}",
+          "benefits": [
+            "{Benefit 1}",
+            "{Benefit 2}",
+            "{Benefit 3}"
+          ],
+          "instructions": "{Step-by-step instructions to perform the yogasana}"
         }
-    );
-
-    // Parse Lambda response
-    if (response.data && response.data.body) {
-        const lambdaBody = JSON.parse(response.data.body);  // Parse JSON string in `body`
-        botReply = lambdaBody.reply || 'Unexpected response format from Lambda.';
-    } else {
-        botReply = 'Unexpected response format from Lambda.';
+      ]
     }
+    
+    **Health Problem Provided**: ${healthProblem}
+    
+    Ensure each yogasana includes:
+    1. A relevant name for the yogasana.
+    2. A list of 3 benefits for the provided health problem.
+    3. Clear, step-by-step instructions to perform the yogasana.
+    
+    Respond only with the proper JSON structure.`;
+    
 
-    
-        // Save the health issue and symptoms to the database
-        const yogaRec = new YogaRecommendation({
-          problem:healthIssue,
-    
-          recommendedYogaPractices : botReply,
-          // Save yoga recommendation
-        });
-    
-        await yogaRec.save(); // Save to MongoDB
-    
-        // Send success response or render the page with both bot reply and yoga recommendation
-        res.render('yoga', {
-          botReply,
-          healthIssue,
-          imageUrl:null
-        });
-      } catch (err) {
-        console.error(err);
-        res.render('yoga', {
-          error: 'An error occurred while saving the data.',
-        });
+    // Step 4: Pass the extracted content and the user's question to the text model
+    const response = await axios.post(
+      "https://api.sambanova.ai/v1/chat/completions",
+      {
+        stream: true,
+        model: "Meta-Llama-3.3-70B-Instruct",
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          { role: "user", content: prompt },
+        ],
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${process.env.API_KEY}`,
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
+    //console.log( response.data);
+
+    const lines = response.data.split('\n');
+
+const dataLines = lines.filter(line => line.startsWith('data:'));
+
+const jsonData = dataLines.map(line => {
+  const cleanLine = line.replace(/^data:\s*/, '');
+  return cleanLine !== '[DONE]' ? JSON.parse(cleanLine) : null;
+}).filter(entry => entry !== null);
+let accumulatedDelta = '';
+
+jsonData.forEach(chunk => {
+  if (chunk.choices[0].delta.content) {
+    accumulatedDelta += chunk.choices[0].delta.content;
+  }
+});
+
+//console.log(accumulatedDelta); 
+res.json({ accumulatedDelta});
 
 
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error in chatbot response");
+  }
+});
 
-    router.get('/generateImg', async (req, res) => {
+
+    router.get('/generateImg',authenticateToken, async (req, res) => {
         const { poseName, problem } = req.query;
       
         try {
@@ -91,7 +143,10 @@ router.post('/', async (req, res) => {
             { new: true, upsert: true }  // 'new: true' returns the updated document, 'upsert: true' creates a new one if not found
         );
           // Respond with the image URL
+          let nutritionEntry = await Nutrition.findOne({user:req.user.userId});
+
           res.render('yoga', {
+            nutritionData:nutritionEntry,
             botReply: yogaRec.recommendedYogaPractices, // Display the previous yoga practices
             healthIssue: problem, // Pass the health issue back to the template
             imageUrl: imageUrl, // Show the generated image URL

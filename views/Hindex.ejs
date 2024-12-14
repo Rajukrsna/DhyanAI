@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusFlow</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container text-center mt-5">
+    <h1 class="mb-4">FocusFlow - Stay Productive and Mindful</h1>
+    <div>
+      <h3 id="timer" class="display-4">1:00</h3>
+      <button class="btn btn-primary btn-lg" id="startBtn">Start Work Session</button>
+      <button class="btn btn-secondary btn-lg" id="resetBtn">Reset</button>
+    </div>
+    <div class="mt-4" id="notification">
+      <p class="text-info"></p>
+    </div>
+  </div>
+
+  <script>
+    let timer;
+    let isWorkSession = true;
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const timerDisplay = document.getElementById('timer');
+    const notification = document.getElementById('notification').querySelector('p');
+
+    function startTimer(duration, display) {
+      let start = Date.now();
+      let diff, minutes, seconds;
+
+      function updateTimer() {
+        diff = duration - (((Date.now() - start) / 1000) | 0);
+
+        minutes = (diff / 60) | 0;
+        seconds = (diff % 60) | 0;
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (diff <= 0) {
+          clearInterval(timer);
+          showNotification();
+          isWorkSession = !isWorkSession;
+        }
+      }
+
+      updateTimer();
+      timer = setInterval(updateTimer, 1000);
+    }
+
+    function showNotification() {
+      if (isWorkSession) {
+        notification.textContent = "Time for a 5-minute mindfulness break! Try some deep breathing or stretching.";
+        startBtn.textContent = "Start Break";
+        timerDisplay.textContent = "05:00";
+      } else {
+        notification.textContent = "Great break! Ready for another work session?";
+        startBtn.textContent = "Start Work Session";
+        timerDisplay.textContent = "1:00";
+      }
+    }
+
+    startBtn.addEventListener('click', () => {
+      clearInterval(timer);
+      const duration = isWorkSession ? 1 * 60 : 5 * 60;
+      startTimer(duration, timerDisplay);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      clearInterval(timer);
+      isWorkSession = true;
+      timerDisplay.textContent = "1:00";
+      startBtn.textContent = "Start Work Session";
+      notification.textContent = "";
+    });
+  </script>
+</body>
+</html>

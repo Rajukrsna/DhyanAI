@@ -2,18 +2,15 @@ const axios = require('axios');
 const express = require('express');
 const mongoose = require('mongoose');
 const Nutrition = require('../models/Nutrition'); // Adjust path as needed
-const router = express.Router();
+const router = express.Router();  
+const User = require('../models/User'); 
+const authenticateToken = require('../middlewares/auth')
 require('dotenv').config();
+
 
 const app_id = process.env.AID;
 const app_key = process.env.AID2;
 
-// Route to render the form for ingredient input
-router.get('/track', async (req, res) => {
-  // Fetch the existing nutrition data from MongoDB
-  let nutritionEntry = await Nutrition.findOne({});
-  res.render('track-nutrition', { nutritionData: nutritionEntry, error: null });
-});
 
 const analyzeNutrition = async (ingredients) => {
   try {
@@ -28,10 +25,11 @@ const analyzeNutrition = async (ingredients) => {
   }
 };
 
-router.post('/analyze', async (req, res) => {
+router.post('/analyze', authenticateToken,async (req, res) => {
   const ingredients = req.body.ingredients.split('\n');
+  const user = await User.findOne({_id :req.user.userId});
   const mealType = req.body.mealType; // Add a field in your form to capture meal type (breakfast, lunch, dinner)
-
+console.log(ingredients);
   try {
     const nutritionData = await analyzeNutrition(ingredients);
 
@@ -45,35 +43,38 @@ router.post('/analyze', async (req, res) => {
     };
 
     // Fetch or create the user's daily nutrition document
-    let nutritionEntry = await Nutrition.findOne({});
+    let nutritionEntry = await Nutrition.findOne({user: req.user.userId});
+   // console.log("bujalo",nutritionEntry);  
     if (!nutritionEntry) {
       nutritionEntry = new Nutrition({
-        calories: 0,
-        protein: 0,
-        carbs: 0,
-        fats: 0,
+        user:req.user.userId,
+        breakfast: { food: '', calories: 0, protein: 0, carbs: 0, fats: 0 },
+        lunch: { food: '', calories: 0, protein: 0, carbs: 0, fats: 0 },
+        dinner: { food: '', calories: 0, protein: 0, carbs: 0, fats: 0 },
         totalCalories: 0,
         totalProtein: 0,
         totalCarbs: 0,
         totalFats: 0,
       });
     }
-
+//console.log(nutritionEntry)
     // Update the document based on the meal type
     nutritionEntry[mealType] = mealData;
-
+//console.log("kujalo",nutritionEntry)
     // Update total nutrients
     nutritionEntry.totalCalories += mealData.calories;
     nutritionEntry.totalProtein += mealData.protein;
     nutritionEntry.totalCarbs += mealData.carbs;
     nutritionEntry.totalFats += mealData.fats;
+user.todaysCalories+=mealData.calories;
 
-    // Save to MongoDB
-    await nutritionEntry.save();
+await user.save();
+    
+    res.json(nutritionEntry);
+    
 
-    res.redirect('/nutrition/track');
   } catch (error) {
-    res.redirect('/track', { nutritionData: null, error: 'Failed to analyze and save nutrition data.' });
+    
   }
 });
 
