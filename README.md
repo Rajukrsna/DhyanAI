@@ -6,7 +6,7 @@
 
 ## 🌟 **Features**
 
-### 🧘 Yoga Recommendations
+### 🧨 Yoga Recommendations
 - **Personalized Yogasana Recommendations** based on your health issues.
 - Utilizes **SambaNova AI Cloud Services** and the **Meta LLM model** to generate relevant yoga asanas.
 - Detailed instructions and benefits for each yogasana are provided.
@@ -23,6 +23,9 @@
 - Boost productivity with the **Pomodoro Technique**.
 - Manage and track your activities effectively by dividing your time into focused work sessions and breaks.
 
+### 🔐 AWS Cognito Authentication
+- Secure and seamless **login and authentication** using AWS Cognito.
+
 ---
 
 ## 🛠️ **Tech Stack**
@@ -31,6 +34,7 @@
 - **Backend**: Node.js with Express
 - **Database**: MongoDB
 - **AI Services**: SambaNova AI Cloud Services (Meta LLM model)
+- **Authentication**: AWS Cognito
 
 ---
 
@@ -45,13 +49,14 @@ Ensure you have the following installed:
 - [Node.js](https://nodejs.org/en/) (v14 or above)
 - [MongoDB](https://www.mongodb.com/try/download/community)
 - [SambaNova API Access](https://sambanova.ai/)
+- [AWS Cognito Setup](https://aws.amazon.com/cognito/)
 
 ### Installation
 
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/dhyan-ai.git
+   git clone https://github.com/Rajukrsna/DhyanAI.git
    cd dhyan-ai
    ```
 
@@ -69,6 +74,8 @@ Ensure you have the following installed:
    PORT=3000
    MONGODB_URI=your-mongodb-uri
    SAMBANOVA_API_KEY=your-sambanova-api-key
+   AWS_COGNITO_CLIENT_ID=your-cognito-client-id
+   AWS_COGNITO_USER_POOL_ID=your-cognito-user-pool-id
    ```
 
 4. **Run the application**:
@@ -98,20 +105,20 @@ Ensure you have the following installed:
 
 ---
 
-## 📸 **Screenshots**
+## 🖼 **Screenshots**
 
 ### 1. **Yoga Recommendations**
-![Yoga Recommendations](./screenshots/yoga_recommendations.png)
+![Yoga Recommendations](./screenshots/habit3.png)
 
 ### 2. **Habit Tracking**
-![Habit Tracking](./screenshots/habit_tracking.png)
+![Habit Tracking](./screenshots/habit1.png)
 
-### 3. **Health Recipes**
-![Health Recipes](./screenshots/health_recipes.png)
+### 3. **Nutritional Analysis**
+![Health Recipes](./screenshots/habit2.png)
 
 ---
 
-## 🤝 **Contributing**
+## 🫏️ **Contributing**
 
 Contributions are welcome! Please follow these steps:
 
@@ -138,21 +145,12 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## 📝 **Acknowledgements**
-
-- **SambaNova AI** for their powerful cloud services.
-- **Bootstrap** for the responsive UI components.
-- **MongoDB** for efficient data storage.
-- **Express** and **EJS** for server-side rendering.
-
----
-
-## 📬 **Contact**
+## 📩 **Contact**
 
 For any questions or suggestions, reach out to:
 
-- **Email**: your-email@example.com
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/your-profile)
+- **Email**: tmpravinraju@gmail.com
+- **LinkedIn**: [Your LinkedIn Profile](www.linkedin.com/in/pravin-raju-t-m-164648252)
 
 ---
 
