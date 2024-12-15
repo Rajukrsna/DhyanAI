@@ -1,8 +1,6 @@
 const axios = require('axios');
 const express = require('express');
 const router = express.Router();
-const YogaRecommendation = require('../models/yoga');
-const Nutrition = require('../models/Nutrition');
 const authenticateToken = require('../middlewares/auth');
 const User= require('../models/User');
 require('dotenv').config();
@@ -14,11 +12,10 @@ const AntroURI = process.env.STURI;
 router.get('/', authenticateToken, async(req,res)=>
 { 
   //console.log(req.user.userId)
-   let nutritionEntry = await Nutrition.findOne({user:req.user.userId});
 const user= await User.findById(req.user.userId);
   // //console.log(nutritionEntry)
 
-    res.render('yoga', { user ,nutritionData: nutritionEntry});
+    res.render('yoga', { user });
 
 })
 
@@ -123,7 +120,7 @@ res.json({ accumulatedDelta});
 
 
     router.get('/generateImg',authenticateToken, async (req, res) => {
-        const { poseName, problem } = req.query;
+        const { poseName } = req.query;
       
         try {
           // Make a GET request to the Lambda function via API Gateway, passing the poseName as a query parameter
@@ -137,18 +134,10 @@ res.json({ accumulatedDelta});
           // Extract the presigned URL from the Lambda response
           const imageUrl = response.data.body;
 
-          const yogaRec = await YogaRecommendation.findOneAndUpdate(
-            { problem: problem },  // Search for the document based on 'problem' (or any unique field)
-            { imageUrl: imageUrl },  // Update the 'imageUrl' field
-            { new: true, upsert: true }  // 'new: true' returns the updated document, 'upsert: true' creates a new one if not found
-        );
-          // Respond with the image URL
-          let nutritionEntry = await Nutrition.findOne({user:req.user.userId});
+
 
           res.render('yoga', {
-            nutritionData:nutritionEntry,
-            botReply: yogaRec.recommendedYogaPractices, // Display the previous yoga practices
-            healthIssue: problem, // Pass the health issue back to the template
+            // Pass the health issue back to the template
             imageUrl: imageUrl, // Show the generated image URL
             poseName
         });

@@ -55,18 +55,16 @@ const habitRoutes = require('./routes/habits');
 const nutritionRoutes = require('./routes/nutrition');
 
 const dashboardRouter = require('./routes/dashboard'); 
-const authRouter = require('./routes/userAuth');  
 const chatbotRoute = require('./routes/chatbot');  
-const generateRoute = require('./routes/generate');
 const recommendYoga = require('./routes/yogas');
 const pomo = require('./routes/pomodoro');
 
-app.use('/userAuth', authRouter);
+
 app.use('/habits', habitRoutes);
 app.use('/nutrition', nutritionRoutes);
 app.use('/dashboard', dashboardRouter);
 app.use('/chatbot', chatbotRoute);  
-app.use('/generate', generateRoute);
+
 app.use('/yogas' , recommendYoga);
 app.use('/pomodoro', pomo);
 
@@ -197,6 +195,7 @@ const logoutUrl = `https://us-east-1he7ntouvo.auth.us-east-1.amazoncognito.com/l
         res.redirect(logoutUrl);
         // Redirect to login page after logout
     });
+    
 
 
 // Start the Server

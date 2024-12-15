@@ -1,9 +1,9 @@
 const axios = require('axios');
 const express = require('express');
 const mongoose = require('mongoose');
-const Nutrition = require('../models/Nutrition'); // Adjust path as needed
 const router = express.Router();  
 const User = require('../models/User'); 
+const Nutrition = require('../models/Nutrition');
 const authenticateToken = require('../middlewares/auth')
 require('dotenv').config();
 
@@ -29,7 +29,7 @@ router.post('/analyze', authenticateToken,async (req, res) => {
   const ingredients = req.body.ingredients.split('\n');
   const user = await User.findOne({_id :req.user.userId});
   const mealType = req.body.mealType; // Add a field in your form to capture meal type (breakfast, lunch, dinner)
-console.log(ingredients);
+//console.log(ingredients);
   try {
     const nutritionData = await analyzeNutrition(ingredients);
 
