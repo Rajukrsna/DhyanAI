@@ -116,7 +116,9 @@ Ensure you have the following installed:
 ### 3. **Nutritional Analysis**
 ![Health Recipes](./screenshots/habit2.png)
 
----
+### 4. **Food Item Chatbot**
+![FoodItem Analyzer](./screenshots/habit4.png)
+
 
 ## 🫏️ **Contributing**
 
